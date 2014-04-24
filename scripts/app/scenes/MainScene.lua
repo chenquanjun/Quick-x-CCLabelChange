@@ -1,12 +1,32 @@
+require("app/action/CCLabelChange")
+require("app/basic/extern")
+
 
 local MainScene = class("MainScene", function()
     return display.newScene("MainScene")
 end)
 
 function MainScene:ctor()
-    ui.newTTFLabel({text = "Hello, World", size = 64, align = ui.TEXT_ALIGN_CENTER})
+    local label =  ui.newTTFLabel({text = "Hello, World", size = 64, align = ui.TEXT_ALIGN_CENTER})
         :pos(display.cx, display.cy)
         :addTo(self)
+
+
+    local action = CCLabelChange:create(label, 3, 100, 200)
+
+    action:playAction()
+
+    self:performWithDelay(function ()
+        local newAction = CCLabelChange:create(label, 1, 500, 1)
+
+        action:pauseAction()
+        self:performWithDelay(function ()
+            newAction:playAction()
+        end, 0.5)
+
+        
+    end, 2)
+
 end
 
 function MainScene:onEnter()
